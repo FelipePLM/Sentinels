@@ -1,7 +1,6 @@
 package com.br.plurismidia.easymonitor.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -20,10 +19,10 @@ public class MonitoringResult {
     private String status;
 
     @Column(name = "CD_MONITORING_DH_REGISTER")
-    private LocalDateTime dataHora;
+    private LocalDateTime dateTime;
 
     @Column(name = "CD_MONITORING_DS_NAME")
-    private String nomeApi;
+    private String nameApi;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CD_API_ID")
