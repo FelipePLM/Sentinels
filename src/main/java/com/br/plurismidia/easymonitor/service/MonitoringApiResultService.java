@@ -4,10 +4,11 @@ import com.br.plurismidia.easymonitor.entity.MonitoringResult;
 import com.br.plurismidia.easymonitor.repository.MonitoringResultRepository;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Setter
+@Service
 @AllArgsConstructor
 public class MonitoringApiResultService {
 
