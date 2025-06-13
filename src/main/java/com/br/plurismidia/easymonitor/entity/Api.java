@@ -16,7 +16,7 @@ public class Api {
 
     @NotBlank(message = "O nome da API é obrigatório.")
     @Column(name = "CD_API_DS_NOME")
-    private String nome;
+    private String name;
 
     @NotBlank(message = "A URL da API é obrigatória.")
     @Column(name = "CD_API_DS_URL")
