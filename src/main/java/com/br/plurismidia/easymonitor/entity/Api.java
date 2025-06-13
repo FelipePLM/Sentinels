@@ -15,10 +15,10 @@ public class Api {
     private Long id;
 
     @NotBlank(message = "O nome da API é obrigatório.")
-    @Column(name = "CD_DS_NOME")
+    @Column(name = "CD_API_DS_NOME")
     private String nome;
 
     @NotBlank(message = "A URL da API é obrigatória.")
-    @Column(name = "CD_DS_URL")
+    @Column(name = "CD_API_DS_URL")
     private String url;
 }
