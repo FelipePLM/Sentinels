@@ -34,3 +34,7 @@ spring:
           starttls:
             enable: true
     protocol: smtp
+
+
+  rabbitmq:
+    addresses: amqp://Pluris:plu5@ft#2014@localhost:5672
