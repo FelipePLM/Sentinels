@@ -76,12 +76,12 @@ public class MonitoringApiService {
         }
 
         if (encontrouErro) {
-            String destinatario = "luislima@plurismidia.com.br";
+            String destinatario = "kauanmendes@plurismidia.com.br";
             String assunto = "🚨 Alerta de APIs com erro detectadas";
             String mensagem = tabelaErro.toString();
 
             EmailDTO emailDTO = new EmailDTO(destinatario, assunto, mensagem, null, "Plurismidia");
-            SmsDTO smsDTO = new SmsDTO("11976090554","🚨 Alerta de APIs com erro detectadas " + mensagem, "Plurismidia");
+            SmsDTO smsDTO = new SmsDTO("11911703714","🚨 Alerta de APIs com erro detectadas " + mensagem, "Plurismidia");
             LogDTO logDTO = new LogDTO("YES", assunto + mensagem, "Plurismidia");
             emailProducer.publishEmail(emailDTO);
             smsProducer.publishSms(smsDTO);

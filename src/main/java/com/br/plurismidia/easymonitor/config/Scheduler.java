@@ -2,14 +2,15 @@ package com.br.plurismidia.easymonitor.config;
 
 import com.br.plurismidia.easymonitor.service.MonitoringApiService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class Scheduler {
 
-    private final MonitoringApiService monitoringService;
+    @Autowired
+    private MonitoringApiService monitoringService;
 
     @Scheduled(fixedDelay = 300000)
     public void executeMonitoring() {
