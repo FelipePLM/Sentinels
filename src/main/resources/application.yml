@@ -37,4 +37,4 @@ spring:
 
 
   rabbitmq:
-    addresses: amqp://Pluris:plu5@ft#2014@localhost:5672
+    addresses: amqp://Pluris:pluris12345@192.168.0.91:5672
