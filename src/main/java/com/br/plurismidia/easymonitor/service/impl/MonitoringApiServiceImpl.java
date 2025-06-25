@@ -37,6 +37,11 @@ public class MonitoringApiServiceImpl implements MonitoringApiService {
     private final LogProducer logProducer;
     private final WebClient webClient;
 
+    /**
+     * Executa o monitoramento de todas as APIs cadastradas.
+     * Limpa resultados anteriores, verifica o status de cada API,
+     * salva os resultados no banco e envia alertas caso existam APIs com erro.
+     */
     @Override
     public void monitorAllApis() {
         LocalDateTime now = LocalDateTime.now();
@@ -61,6 +66,13 @@ public class MonitoringApiServiceImpl implements MonitoringApiService {
         }
     }
 
+    /**
+     * Realiza uma requisição HTTP GET para verificar o status da API.
+     * Caso haja erro na requisição, captura o código HTTP de erro.
+     *
+     * @param api a entidade Api a ser verificada
+     * @return Mono contendo o código HTTP do status da resposta
+     */
     private Mono<String> checkApiStatus(Api api) {
         return webClient.get()
                 .uri(api.getUrl())
@@ -72,6 +84,12 @@ public class MonitoringApiServiceImpl implements MonitoringApiService {
                 .onErrorReturn("0");
     }
 
+    /**
+     * Salva os resultados do monitoramento no banco de dados.
+     *
+     * @param statuses lista de status das APIs verificadas
+     * @param timestamp instante em que o monitoramento foi executado
+     */
     private void saveResults(List<ApiStatus> statuses, LocalDateTime timestamp) {
         statuses.forEach(s -> {
             MonitoringResult result = MonitoringResult.builder()
@@ -84,6 +102,12 @@ public class MonitoringApiServiceImpl implements MonitoringApiService {
         });
     }
 
+    /**
+     * Envia alertas via e-mail, SMS e log para as APIs que apresentaram erro.
+     *
+     * @param erroApis lista das APIs com erro
+     * @param timestamp instante do monitoramento para o alerta
+     */
     private void sendAlert(List<ApiStatus> erroApis, LocalDateTime timestamp) {
         StringBuilder mensagem = new StringBuilder();
         erroApis.forEach(apiStatus -> mensagem.append("API: ")
@@ -98,5 +122,8 @@ public class MonitoringApiServiceImpl implements MonitoringApiService {
         logProducer.publishLog(new LogDTO("YES", ALERT_SUBJECT + " " + mensagem, ALERT_SENDER_NAME));
     }
 
+    /**
+     * Classe interna para armazenar o status da API junto com sua entidade.
+     */
     private record ApiStatus(Api api, String status) {}
 }

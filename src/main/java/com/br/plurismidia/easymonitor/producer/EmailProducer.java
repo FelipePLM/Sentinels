@@ -10,11 +10,15 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class EmailProducer {
+
     private final RabbitTemplate rabbitTemplate;
 
+    /**
+     * Envia mensagem de e-mail para a fila do RabbitMQ.
+     * @param emailDTO Dados do e-mail a ser enviado
+     */
     public void publishEmail(EmailDTO emailDTO) {
-        rabbitTemplate.convertAndSend("exchange_prod","sendEmail", emailDTO);
-        log.info("Email Enviado com sucesso = {}", emailDTO);
+        rabbitTemplate.convertAndSend("exchange_prod", "sendEmail", emailDTO);
+        log.info("Email enviado com sucesso: {}", emailDTO);
     }
-
 }

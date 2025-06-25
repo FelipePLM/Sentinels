@@ -1,8 +1,18 @@
 package com.br.plurismidia.easymonitor.bean.dto;
 
-public record EmailDTO(String recipient, String subject, String messageContent, String link, String operation) {
-    @Override
-    public String toString() {
-        return "EmailDTO{" + "recipient='" + recipient + ", subject='" + subject + ", messageContent='" + messageContent + ", link='" + link + ", operation='" + operation + '}';
-    }
-}
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "DTO para envio de e-mails")
+public record EmailDTO(
+        @Schema(description = "Destinatário do e-mail", example = "usuario@empresa.com")
+        String recipient,
+
+        @Schema(description = "Assunto do e-mail", example = "Alerta de Erro")
+        String subject,
+
+        @Schema(description = "Conteúdo do e-mail")
+        String messageContent,
+
+        String link,
+        String operation
+) {}

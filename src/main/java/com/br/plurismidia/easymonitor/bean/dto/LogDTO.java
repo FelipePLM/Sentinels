@@ -1,9 +1,15 @@
 package com.br.plurismidia.easymonitor.bean.dto;
 
-public record LogDTO(String error, String message, String operation) {
-    @Override
-    public String toString() {
-        return "LogDTO{" + "error='" + error + ", message='" + message + ", operation='" + operation + '}';
-    }
-}
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(description = "DTO para envio de logs de monitoramento")
+public record LogDTO(
+        @Schema(description = "Indicação de erro", example = "YES")
+        String error,
+
+        @Schema(description = "Mensagem do log")
+        String message,
+
+        @Schema(description = "Operação que gerou o log")
+        String operation
+) {}

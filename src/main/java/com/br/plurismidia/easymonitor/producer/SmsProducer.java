@@ -13,9 +13,12 @@ public class SmsProducer {
 
     private final RabbitTemplate rabbitTemplate;
 
+    /**
+     * Envia mensagem SMS para a fila do RabbitMQ.
+     * @param smsDTO Dados do SMS a ser enviado
+     */
     public void publishSms(SmsDTO smsDTO) {
-        rabbitTemplate.convertAndSend("exchange_prod","sendSms", smsDTO);
-        log.info("SMS Enviado com sucesso = {}", smsDTO);
+        rabbitTemplate.convertAndSend("exchange_prod", "sendSms", smsDTO);
+        log.info("SMS enviado com sucesso: {}", smsDTO);
     }
-
 }

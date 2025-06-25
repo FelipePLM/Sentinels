@@ -13,8 +13,12 @@ public class LogProducer {
 
     private final RabbitTemplate rabbitTemplate;
 
-    public void publishLog(LogDTO LogDto) {
-        rabbitTemplate.convertAndSend("exchange_prod","sendLogs", LogDto);
-        log.info("LOG Enviado com sucesso = {}", LogDto);
+    /**
+     * Publica um log na fila do RabbitMQ.
+     * @param logDto DTO contendo dados do log
+     */
+    public void publishLog(LogDTO logDto) {
+        rabbitTemplate.convertAndSend("exchange_prod", "sendLogs", logDto);
+        log.info("Log enviado com sucesso: {}", logDto);
     }
 }

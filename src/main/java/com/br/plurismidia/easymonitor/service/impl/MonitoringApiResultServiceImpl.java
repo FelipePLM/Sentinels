@@ -14,11 +14,19 @@ public class MonitoringApiResultServiceImpl implements MonitoringApiResultServic
 
     private final MonitoringResultRepository repository;
 
+    /**
+     * Retorna todos os resultados de monitoramento armazenados.
+     *
+     * @return lista de MonitoringResult
+     */
     @Override
     public List<MonitoringResult> findAll() {
         return repository.findAll();
     }
 
+    /**
+     * Remove todos os resultados de monitoramento armazenados no banco.
+     */
     @Override
     public void deleteAll() {
         repository.deleteAll();

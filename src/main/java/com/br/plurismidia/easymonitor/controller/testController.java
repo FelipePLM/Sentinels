@@ -1,35 +1,29 @@
 package com.br.plurismidia.easymonitor.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/test")
 @EnableAutoConfiguration
+@Tag(name = "API Test", description = "Endpoints para teste de integridade da aplicação")
 public class testController {
 
-
-    // 	GET TESTE INTEGRIDADE DA API
+    @Operation(summary = "Teste GET para verificação de status")
     @CrossOrigin
     @GetMapping("getstatusapp")
-    // http://localhost:8080/api/test/getstatusapp
     public String getStatusApp() {
         System.gc();
         return "{\"status\":\"up\"}";
     }
 
-    // 	POST TESTE INTEGRIDADE DA API
+    @Operation(summary = "Teste POST para verificação de status")
     @CrossOrigin
     @PostMapping(value = "poststatusapp")
-    // http://localhost:8080/api/test/poststatusapp
     public String postStatusApp() {
         System.gc();
         return "{\"status\":\"up\"}";
     }
-
-
 }
