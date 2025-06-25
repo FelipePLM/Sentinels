@@ -1,4 +1,4 @@
-package com.br.plurismidia.easymonitor.dto;
+package com.br.plurismidia.easymonitor.bean.dto;
 
 public record LogDTO(String error, String message, String operation) {
     @Override

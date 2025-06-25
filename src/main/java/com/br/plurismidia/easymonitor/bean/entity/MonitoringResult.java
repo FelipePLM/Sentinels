@@ -1,4 +1,4 @@
-package com.br.plurismidia.easymonitor.entity;
+package com.br.plurismidia.easymonitor.bean.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,9 +23,6 @@ public class MonitoringResult {
 
     @Column(name = "CD_MONITORING_DS_NAME")
     private String nameApi;
-
-    @Column(name = "CD_MONITORING_DS_MESSAGE")
-    private String message;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CD_API_ID")

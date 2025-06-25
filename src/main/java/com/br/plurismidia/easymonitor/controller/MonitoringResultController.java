@@ -1,6 +1,6 @@
 package com.br.plurismidia.easymonitor.controller;
 
-import com.br.plurismidia.easymonitor.entity.MonitoringResult;
+import com.br.plurismidia.easymonitor.bean.entity.MonitoringResult;
 import com.br.plurismidia.easymonitor.service.MonitoringApiResultService;
 import com.br.plurismidia.easymonitor.service.MonitoringApiService;
 import lombok.RequiredArgsConstructor;

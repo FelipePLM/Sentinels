@@ -1,4 +1,4 @@
-package com.br.plurismidia.easymonitor.entity;
+package com.br.plurismidia.easymonitor.bean.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

@@ -1,6 +1,6 @@
 package com.br.plurismidia.easymonitor.controller;
 
-import com.br.plurismidia.easymonitor.entity.Api;
+import com.br.plurismidia.easymonitor.bean.entity.Api;
 import com.br.plurismidia.easymonitor.service.ApiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

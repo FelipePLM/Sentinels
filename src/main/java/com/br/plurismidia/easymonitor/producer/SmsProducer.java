@@ -1,6 +1,6 @@
 package com.br.plurismidia.easymonitor.producer;
 
-import com.br.plurismidia.easymonitor.dto.SmsDTO;
+import com.br.plurismidia.easymonitor.bean.dto.SmsDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
