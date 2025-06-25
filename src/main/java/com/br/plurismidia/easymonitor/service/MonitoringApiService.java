@@ -3,7 +3,6 @@ package com.br.plurismidia.easymonitor.service;
 import com.br.plurismidia.easymonitor.dto.EmailDTO;
 import com.br.plurismidia.easymonitor.dto.LogDTO;
 import com.br.plurismidia.easymonitor.dto.SmsDTO;
-import com.br.plurismidia.easymonitor.email.service.EmailService;
 import com.br.plurismidia.easymonitor.entity.Api;
 import com.br.plurismidia.easymonitor.entity.MonitoringResult;
 import com.br.plurismidia.easymonitor.producer.EmailProducer;
@@ -11,82 +10,96 @@ import com.br.plurismidia.easymonitor.producer.LogProducer;
 import com.br.plurismidia.easymonitor.producer.SmsProducer;
 import com.br.plurismidia.easymonitor.repository.ApiRepository;
 import com.br.plurismidia.easymonitor.repository.MonitoringResultRepository;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class MonitoringApiService {
 
-    private final ApiRepository apiRepo;
-    private final MonitoringResultRepository resultadoRepo;
-    private final RestTemplate restTemplate = new RestTemplate();
+    private static final String ALERT_EMAIL = "kauanmendes@plurismidia.com.br";
+    private static final String ALERT_SMS_NUMBER = "11911703714";
+    private static final String ALERT_SENDER_NAME = "Plurismidia";
+    private static final String ALERT_SUBJECT = "🚨 Alerta de APIs com erro detectadas";
+
+    private final ApiRepository apiRepository;
+    private final MonitoringResultRepository resultRepository;
     private final EmailProducer emailProducer;
     private final SmsProducer smsProducer;
     private final LogProducer logProducer;
+    private final WebClient webClient;
 
     public void monitorAllApis() {
-        var apis = apiRepo.findAll();
-        resultadoRepo.deleteAll();
+        LocalDateTime now = LocalDateTime.now();
 
-        StringBuilder tabelaErro = new StringBuilder();
-        boolean encontrouErro = false;
+        // Limpa resultados antigos
+        resultRepository.deleteAll();
 
-        for (Api api : apis) {
-            String status;
+        List<Api> apis = apiRepository.findAll();
 
-            try {
-                ResponseEntity<String> resposta = restTemplate.getForEntity(api.getUrl(), String.class);
+        // Executa as verificações em paralelo
+        List<ApiStatus> statuses = Flux.fromIterable(apis)
+                .flatMap(api -> checkApiStatus(api).map(status -> new ApiStatus(api, status)))
+                .collectList()
+                .block();
 
-                if (resposta.getStatusCode() == HttpStatus.OK && resposta.getBody() != null) {
-                    String corpoResposta = resposta.getBody().toLowerCase();
-                    status = corpoResposta.contains("\"status\":\"up\"") ? "UP" : "DOWN";
-                } else {
-                    status = "DOWN";
-                    encontrouErro = true;
-                }
+        saveResults(statuses, now);
 
-            } catch (Exception e) {
-                status = "ERRO";
-                encontrouErro = true;
-            }
+        List<ApiStatus> erroApis = statuses.stream()
+                .filter(s -> !s.status.equals("200"))
+                .toList();
 
-            if (!status.equals("UP")) {
-                tabelaErro.append("<tr>")
-                        .append("<td>").append(api.getName()).append("</td>")
-                        .append("<td>").append(api.getUrl()).append("</td>")
-                        .append("<td>").append(LocalDateTime.now()).append("</td>")
-                        .append("<td>").append(status).append("</td>")
-                        .append("</tr>");
-            }
-
-            resultadoRepo.save(MonitoringResult.builder()
-                    .api(api)
-                    .nameApi(api.getName())
-                    .status(status)
-                    .dateTime(LocalDateTime.now())
-                    .build());
-        }
-
-        if (encontrouErro) {
-            String destinatario = "kauanmendes@plurismidia.com.br";
-            String assunto = "🚨 Alerta de APIs com erro detectadas";
-            String mensagem = tabelaErro.toString();
-
-            EmailDTO emailDTO = new EmailDTO(destinatario, assunto, mensagem, null, "Plurismidia");
-            SmsDTO smsDTO = new SmsDTO("11911703714","🚨 Alerta de APIs com erro detectadas " + mensagem, "Plurismidia");
-            LogDTO logDTO = new LogDTO("YES", assunto + mensagem, "Plurismidia");
-            emailProducer.publishEmail(emailDTO);
-            smsProducer.publishSms(smsDTO);
-            logProducer.publishLog(logDTO);
-
+        if (!erroApis.isEmpty()) {
+            sendAlert(erroApis, now);
         }
     }
+
+    private Mono<String> checkApiStatus(Api api) {
+        return webClient.get()
+                .uri(api.getUrl())
+                .retrieve()
+                .toBodilessEntity()
+                .map(response -> String.valueOf(response.getStatusCodeValue()))
+                .onErrorResume(WebClientResponseException.class, ex ->
+                        Mono.just(String.valueOf(ex.getRawStatusCode())))
+                .onErrorReturn("0");
+    }
+
+    private void saveResults(List<ApiStatus> statuses, LocalDateTime timestamp) {
+        statuses.forEach(s -> {
+            MonitoringResult result = MonitoringResult.builder()
+                    .api(s.api)
+                    .nameApi(s.api.getName())
+                    .status(s.status)
+                    .dateTime(timestamp)
+                    .build();
+            resultRepository.save(result);
+        });
+    }
+
+    private void sendAlert(List<ApiStatus> erroApis, LocalDateTime timestamp) {
+        StringBuilder mensagem = new StringBuilder();
+        erroApis.forEach(apiStatus -> mensagem.append("API: ")
+                .append(apiStatus.api.getName())
+                .append(" | URL: ").append(apiStatus.api.getUrl())
+                .append(" | Status: ").append(apiStatus.status)
+                .append(" | Data/Hora: ").append(timestamp)
+                .append("\n"));
+
+        emailProducer.publishEmail(new EmailDTO(ALERT_EMAIL, ALERT_SUBJECT, mensagem.toString(), null, ALERT_SENDER_NAME));
+        smsProducer.publishSms(new SmsDTO(ALERT_SMS_NUMBER, ALERT_SUBJECT, ALERT_SENDER_NAME));
+        logProducer.publishLog(new LogDTO("YES", ALERT_SUBJECT + " " + mensagem.toString(), ALERT_SENDER_NAME));
+    }
+
+    private record ApiStatus(Api api, String status) {}
 }

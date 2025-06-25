@@ -12,7 +12,7 @@ public class Scheduler {
     @Autowired
     private MonitoringApiService monitoringService;
 
-    @Scheduled(fixedDelay = 300000)
+    @Scheduled(fixedDelay = 3000000)
     public void executeMonitoring() {
         System.out.println("Executando monitoring...");
         monitoringService.monitorAllApis();
