@@ -12,9 +12,9 @@ public class Scheduler {
     private MonitoringApiService monitoringService;
 
     /**
-     * Método agendado para executar o monitoramento a cada 3000000ms (~50 minutos).
+     * Método agendado para executar o monitoramento a cada 1200000ms (~20 minutos).
      */
-    @Scheduled(fixedDelay = 3000000)
+    @Scheduled(fixedDelay = 1200000)
     public void executeMonitoring() {
         System.out.println("Executando monitoring...");
         monitoringService.monitorAllApis();
