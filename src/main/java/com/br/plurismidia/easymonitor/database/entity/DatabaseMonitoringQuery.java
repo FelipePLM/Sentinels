@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "monitoring_query")
+@Table(name = "CDTB_MONITORING_QUERY_MOQU")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class DatabaseMonitoringQuery {
 

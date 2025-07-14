@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "database_configs")
+@Table(name = "CDTB_DATABASE_CONFIG_DACO")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class DatabaseConfig {
 

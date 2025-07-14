@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Entity
-@Table(name = "TB_API")
+@Table(name = "CDTB_API")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class MonitoredApi {
 

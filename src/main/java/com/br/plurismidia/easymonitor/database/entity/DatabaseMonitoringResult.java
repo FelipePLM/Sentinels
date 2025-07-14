@@ -6,7 +6,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "database_monitoring_result")
+@Table(name = "CDTB_DATABASE_MONITORING_RESULT_DARE")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class DatabaseMonitoringResult {
 

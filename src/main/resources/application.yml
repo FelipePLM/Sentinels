@@ -3,10 +3,10 @@ spring:
     name: easymonitor
 
   datasource:
-    url: jdbc:h2:mem:easymonitordb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: dbc:sqlserver://pluris-rds-sql-01.c9mn1wtcodo7.sa-east-1.rds.amazonaws.com:1433;databaseName=EASYTI;encrypt=true;trustServerCertificate=true;
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    username: easyti
+    password: dg@ht0ert59
 
   jpa:
     show-sql: true
@@ -14,12 +14,12 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.SQLServer2012Dialect
         format_sql: true
 
   h2:
     console:
-      enabled: true
+      enabled: false
       path: /h2-console
 
   rabbitmq:
