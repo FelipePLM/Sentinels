@@ -1,12 +1,12 @@
 spring:
   application:
-    name: easymonitor
+    name: Sentinels
 
   datasource:
-    url: dbc:sqlserver://pluris-rds-sql-01.c9mn1wtcodo7.sa-east-1.rds.amazonaws.com:1433;databaseName=EASYTI;encrypt=true;trustServerCertificate=true;
+    url: dbc:sqlserver://DATABASE:PORT;databaseName=DATABASE;encrypt=true;trustServerCertificate=true;
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    username: easyti
-    password: dg@ht0ert59
+    username: USER
+    password: PASSWORD
 
   jpa:
     show-sql: true
@@ -23,4 +23,4 @@ spring:
       path: /h2-console
 
   rabbitmq:
-    addresses: amqp://Pluris:pluris12345@192.168.0.91:5672
+    addresses: amqp://RMQ:RMQ@127.0.0.1:5672

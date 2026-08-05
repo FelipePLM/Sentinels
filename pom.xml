@@ -8,11 +8,11 @@
 		<version>3.5.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.br.plurismidia</groupId>
-	<artifactId>easymonitor</artifactId>
+	<groupId>com.github.felipeplm</groupId>
+	<artifactId>sentinels</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>easymonitor</name>
-	<description>Monitoramento de APIs e Serviços </description>
+	<name>Sentinels</name>
+	<description>Monitoramento de APIs e Serviços</description>
 	<url/>
 	<licenses>
 		<license/>
